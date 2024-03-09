@@ -477,6 +477,11 @@
       height: 8vh;
     }
 
+    #rollout, #rolloutd6 {
+      width: 2rem;
+      margin: auto;
+    }
+
     .statBox {
       display: flex;
       flex-direction: column;
@@ -788,13 +793,13 @@
           <div id="logAndButtons">
             <textarea id="log" name="log"></textarea>
             <div id="logButtons">
-              <button onclick="rollout.innerText = `(${d10()},${d10()})`" class="flat stackedButton"><embed
+              <button onclick="rollTens()" class="flat stackedButton"><embed
                   src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJMYXllcl8xIiBkYXRhLW5hbWU9IkxheWVyIDEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiPjxwYXRoIGQ9Ik0xMy44MjksLjc0OGMtLjk3Ny0uOTY1LTIuNjMyLTEuMDAyLTMuNjc3LC4wMzdMLjAyMiwxMy4wNzhsMTAuMTY0LDEwLjE3M2MuNDg3LC40ODMsMS4xMzUsLjc0OSwxLjgyMSwuNzQ5czEuMzM0LS4yNjYsMS44MjMtLjc1MWwxMC4xNS0xMC4xNzFMMTMuODI5LC43NDhabTguMzUzLDExLjcxN2wtNS42My0uOTExTDEyLjgxNSwxLjI1OWMuMSwuMDU4LC4yMDgsLjEwMiwuMjkzLC4xODNsOS4wNzMsMTEuMDIyWm0tMTAuMTc1LDIuMDQ3bC0zLjU5Mi0yLjY4OUwxMi4wMDcsMS45NjNsMy41NzksOS44Ni0zLjU3OSwyLjY4OVpNMTAuODksMS40NTljLjA5LS4wODgsLjIwMy0uMTM4LC4zMS0uMmwtMy43NSwxMC4yOTQtNS42MjQsLjkxMUwxMC44OSwxLjQ1OVpNMS44MzMsMTMuNDc1bDUuODU1LS45NDgsMy44MTIsMi44NTQsLjAwNyw3LjUxMWMtLjIyNy0uMDcyLS40NDItLjE3OC0uNjE2LS4zNUwxLjgzMywxMy40NzVabTExLjI5Myw5LjA2NWMtLjE3NSwuMTczLS4zOTEsLjI4LS42MTksLjM1MmwtLjAwNy03LjUsMy44MTEtMi44NjUsNS44NjEsLjk0OC05LjA0Nyw5LjA2NVoiLz48L3N2Zz4K" />
                 <div id="rollout" name="rollout">(0, 0)</div>
               </button>
-              <button onclick="rolloutd6.innerText = `(${d6()})`" class="flat stackedButton"><embed
+              <button onclick="rollSixes()" class="flat stackedButton"><embed
                   src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIGZpbGw9IiMwMDAwMDAiIHdpZHRoPSI4MDBweCIgaGVpZ2h0PSI4MDBweCIgdmlld0JveD0iLTMyIDAgNTEyIDUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNDIyLjE5IDEwOS45NUwyNTYuMjEgOS4wN2MtMTkuOTEtMTIuMS00NC41Mi0xMi4xLTY0LjQzIDBMMjUuODEgMTA5Ljk1Yy01LjMyIDMuMjMtNS4yOSAxMS4yNy4wNiAxNC40NkwyMjQgMjQyLjU1bDE5OC4xNC0xMTguMTRjNS4zNS0zLjE5IDUuMzgtMTEuMjIuMDUtMTQuNDZ6bTEzLjg0IDQ0LjYzTDI0MCAyNzEuNDZ2MjIzLjgyYzAgMTIuODggMTMuMzkgMjAuOTEgMjQuMDUgMTQuNDNsMTUyLjE2LTkyLjQ4YzE5LjY4LTExLjk2IDMxLjc5LTMzLjk0IDMxLjc5LTU3Ljd2LTE5Ny43YzAtNi40MS02LjY0LTEwLjQzLTExLjk3LTcuMjV6TTAgMTYxLjgzdjE5Ny43YzAgMjMuNzcgMTIuMTEgNDUuNzQgMzEuNzkgNTcuN2wxNTIuMTYgOTIuNDdjMTAuNjcgNi40OCAyNC4wNS0xLjU0IDI0LjA1LTE0LjQzVjI3MS40NkwxMS45NyAxNTQuNThDNi42NCAxNTEuNCAwIDE1NS40MiAwIDE2MS44M3oiLz48L3N2Zz4=" />
-                <div id="rolloutd6" name="rollout">(0)</div>
+                <div id="rolloutd6" name="rolloutd6">(0)</div>
               </button>
             </div>
           </div>
@@ -852,6 +857,20 @@
     epic: 1
   };
 
+  const rollTens = () => {
+    const rolls = `(${d10()},${d10()})`;
+    rollout.textContent = rolls;
+    const log = document.querySelector("#log");
+    log.value = log.value + rolls;
+  };
+
+  const rollSixes = () => {
+    const rolls = `(${d6()})`;
+    rolloutd6.textContent = rolls;
+    const log = document.querySelector("#log");
+    log.value = log.value + rolls;
+  }
+
   const loadBond = (bond, index) => {
     const bondElement = document.createElement("div");
     bondElement.className = "bond";
@@ -883,6 +902,7 @@
     if (imageURL !== null && imageURL !== '') {
       document.querySelector("#avatarImage").src = imageURL;
       sheet_data.img = imageURL;
+      saveData();
     }
   }
 
@@ -1037,6 +1057,7 @@
       danger: "dangerous",
       progress: 0
     });
+    saveData();
     refreshDisplay();
   }
 
@@ -1044,6 +1065,7 @@
     sheet_data.bonds.push({
       text: '',
     });
+    saveData();
     refreshDisplay();
   }
 
@@ -1051,6 +1073,7 @@
     sheet_data.assets.push({
       text: '',
     });
+    saveData();
     refreshDisplay();
   }
 
