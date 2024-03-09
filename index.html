@@ -178,14 +178,8 @@
     }
   </style>
   <style>
-    body.light_mode {
-      --background: #efebdf;
-      --text: #381701;
-      --accent: #e8a053;
-      --accentText: #936a4e;
-    }
 
-    body.dark_mode {
+    body.palette-0 {
       --background: #2d162c;
       --text: #9775a6;
       --accent: #412752;
@@ -194,6 +188,92 @@
       & embed {
         filter: invert(0.7);
       }
+    }
+
+    body.palette-1 {
+      --background: #8be5ff;
+      --text: #622e4c;
+      --accent: #7550e8;
+      --accentText: #608fcf;
+    }
+
+    body.palette-2 {
+      --background: #d0d058;
+      --text: #405010;
+      --accent: #a0a840;
+      --accentText: #708028;
+    }
+
+    body.palette-3 {
+      --background: #00303b;
+      --text: #ffce96;
+      --accent: #ff7777;
+      --accentText: #f1f2da;
+
+      & embed {
+        filter: invert(0.7);
+      }
+    }
+
+    body.palette-4 {
+      --background: #f1f2da;
+      --text: #00303b;
+      --accent: #ffce96;
+      --accentText: #ff7777;
+    }
+
+    body.palette-5 {
+      --background: #300030;
+      --text: #f89020;
+      --accent: #602878;
+      --accentText: #f8f088;
+
+      & embed {
+        filter: invert(0.7);
+      }
+    }
+
+    body.palette-6 {
+      --background: #f8f088;
+      --text: #300030;
+      --accent: #f89020;
+      --accentText: #602878;
+    }
+
+    body.palette-7 {
+      --background: #ffefff;
+      --text: #181010;
+      --accent: #f7b58c;
+      --accentText: #84739c;
+    }
+
+    body.palette-8 {
+      --background: #181010;
+      --text: #ffefff;
+      --accent: #84739c;
+      --accentText: #f7b58c;
+
+      & embed {
+        filter: invert(0.7);
+      }
+    }
+
+    body.palette-8 {
+      --background: #2b2b26;
+      --text: #e0dbcd;
+      --accent: #706b66;
+      --accentText: #a89f94;
+
+      & embed {
+        filter: invert(0.7);
+      }
+    }
+
+    body.palette-9 {
+      --background: #e0dbcd;
+      --text: #2b2b26;
+      --accent: #a89f94;
+      --accentText: #706b66;
     }
 
     body {
@@ -250,9 +330,9 @@
 
     input[type="radio"]:checked+label,
     input[type="checkbox"]:checked+label {
-      background-color: var(--accent);
-      border: 2px solid var(--accentText);
-      color: var(--text);
+      background-color: var(--accentText);
+      border: 2px solid var(--text);
+      color: var(--accent);
     }
 
     input+label:hover {
@@ -261,6 +341,16 @@
 
     input[type="file"]+label:hover {
       border: none !important;
+    }
+
+    input[type="range"] {
+      accent-color: var(--accent);
+      color: var(--text);
+      background-color: var(--text);
+      border-radius: 15px;
+      height: 0.3rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
     }
 
     #momentumAndTitleContainer {
@@ -397,7 +487,7 @@
       text-align: center;
       font-size: 2rem;
       border: none;
-      text-decoration: hotpink dashed underline;
+      text-decoration: var(--accent) dashed underline;
       cursor: pointer;
     }
 
@@ -433,9 +523,12 @@
       }
     }
 
-    #conditions, #banes, #burdens {
+    #conditions,
+    #banes,
+    #burdens {
       display: flex;
       justify-content: center;
+      gap: 1rem;
     }
 
     #stats {
@@ -469,7 +562,7 @@
     }
 
     #avatarImage {
-      object-fit:cover;
+      object-fit: cover;
     }
 
     .stackedButton {
@@ -477,7 +570,8 @@
       height: 8vh;
     }
 
-    #rollout, #rolloutd6 {
+    #rollout,
+    #rolloutd6 {
       width: 2rem;
       margin: auto;
     }
@@ -511,11 +605,13 @@
 
       & details {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
         & button {
           width: 100%;
           font-size: large;
+          margin-top: 0.25rem;
+          margin-bottom: 0.5rem;
         }
       }
     }
@@ -659,34 +755,35 @@
     const d10 = () => _randBetween(1, 10);
     const d6 = () => _randBetween(1, 6);
 
-    const swapTheme = () => {
+    const swapTheme = (e) => {
+      console.log(e);
       const body = document.querySelector("body");
-      if (body.className.includes("dark")) {
-        body.className = "light_mode"
-      } else {
-        body.className = "dark_mode"
-      }
+      const button = document.querySelector("#themeButton");
+      const index = (Number(body.className[body.className.length - 1]) + 1) % 10
+      body.className = `palette-${index}`;
+
+      button.textContent = `Theme: [${index}]`
+
+      localStorage.setItem("theme", index);
+
     }
   </script>
 </head>
 
-<body class="light_mode">
+<body class="palette-0">
   <div id="controls">
     <details>
       <summary>
         Controls
       </summary>
-      <button class="flat" onclick="saveData()">Save</button>
-      <button class="flat" onclick="loadData()">Load</button>
-      <hr />
-      <button class="flat" onclick="exportData()">Export</button>
-      <button class="flat" onclick="importData()">Import</button>
-      <hr />
       <button class="flat" onclick="addVow()">Add vow</button>
       <button class="flat" onclick="addBond()">Add bond</button>
       <button class="flat" onclick="addAsset()">Add asset</button>
       <hr />
-      <button class="flat" onclick="swapTheme()">Swap colours</button>
+      <button class="flat" onclick="exportData()">Export</button>
+      <button class="flat" onclick="importData()">Import</button>
+      <hr />
+      <button class="flat" id="themeButton" onclick="swapTheme()">Cycle theme</button>
     </details>
   </div>
   <div id="container">
@@ -1198,6 +1295,12 @@
       console.log({ name, id, type, value: input.checked, label: input.labels[0].textContent });
       setCheckboxOptions({ name, id, value: input.checked, label: input.labels[0].textContent })
     }
+  }
+
+  const theme = localStorage.getItem("theme");
+  if (theme) {
+    document.querySelector("body").className = `palette-${theme}`;
+    document.querySelector("#themeButton").textContent = `Theme [${theme}]`;
   }
 </script>
 
