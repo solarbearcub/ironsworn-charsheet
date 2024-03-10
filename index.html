@@ -440,7 +440,7 @@
         margin: auto;
       }
 
-      & input[type="text"] {
+      & input[type= "text"] {
         width: 90%;
       }
 
@@ -1072,7 +1072,7 @@
     document.getElementById("marked").checked = sheet_data.burdens.marked;
     document.getElementById("haunted").checked = sheet_data.burdens.haunted;
 
-    document.getElementById("log").textContent = sheet_data.log;
+    document.getElementById("log").value = sheet_data.log;
     document.getElementById("max").value = sheet_data.max;
     document.getElementById("reset").value = sheet_data.reset;
 
@@ -1130,9 +1130,14 @@
         { accept: 'image/png' },
         { accept: 'image/webp' }
       ]
-    }).then(result => {
-      console.log({ result });
     })
+    .then(fileHandler => fileHandler[0].getFile())
+    .then(file => file.text())
+    .then(text => {
+      sheet_data = JSON.parse(text);
+      console.log(sheet_data);
+      refreshDisplay();
+    });
   }
 
   loadData();
