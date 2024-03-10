@@ -931,7 +931,7 @@
       <h2>Momentum</h2>
       <div id="momentumContainer">
         <div class="statBox">
-          <button class="flat" onClick="getElementById(`momentum${getElementById('max').value}`).click()">
+          <button class="flat" onClick="getElementById(`momentum${getElementById('reset').value}`).click()">
             <label for="reset">Reset</label></button>
           </button>
           <input type="number" name="reset" id="reset" value="0" />
@@ -1166,61 +1166,6 @@
     document.getElementById("vowColumn").appendChild(vowElement);
   }
 
-  const loadData = () => {
-    const _sheet_data = localStorage.getItem("sheet_data");
-    if (_sheet_data) {
-      sheet_data = JSON.parse(_sheet_data);
-    }
-
-    refreshDisplay();
-
-    console.log("Loaded.");
-  };
-
-  const refreshDisplay = () => {
-    document.getElementById("vowColumn").innerHTML = "";
-    document.getElementById("bondColumn").innerHTML = "";
-
-    document.getElementById("expProgress").value = sheet_data.exp;
-    expDisplay.textContent = `Bond progress (${sheet_data.exp})`
-    document.getElementById("name").value = sheet_data.name;
-
-    document.getElementById(`health${sheet_data.resources.health}`).checked = true;
-    document.getElementById(`spirit${sheet_data.resources.spirit}`).checked = true;
-    document.getElementById(`supply${sheet_data.resources.supply}`).checked = true;
-    document.getElementById(`momentum${sheet_data.momentum}`).checked = true;
-
-    document.getElementById('edge').value = sheet_data.stats.edge;
-    document.getElementById('iron').value = sheet_data.stats.iron;
-    document.getElementById('heart').value = sheet_data.stats.heart;
-    document.getElementById('shadow').value = sheet_data.stats.shadow;
-    document.getElementById('wits').value = sheet_data.stats.wits;
-
-    sheet_data.vows.forEach(loadVow);
-    sheet_data.bonds.forEach(loadBond);
-    sheet_data.assets.forEach(loadAsset);
-
-    document.getElementById("wounded").checked = sheet_data.conditions.wounded;
-    document.getElementById("shaken").checked = sheet_data.conditions.shaken;
-    document.getElementById("unprepared").checked = sheet_data.conditions.unprepared;
-    document.getElementById("encumbered").checked = sheet_data.conditions.encumbered;
-
-    document.getElementById("maimed").checked = sheet_data.banes.maimed;
-    document.getElementById("corrupted").checked = sheet_data.banes.corrupted;
-
-    document.getElementById("marked").checked = sheet_data.burdens.marked;
-    document.getElementById("haunted").checked = sheet_data.burdens.haunted;
-
-    document.getElementById("log").value = sheet_data.log;
-    document.getElementById("max").value = sheet_data.max;
-    document.getElementById("reset").value = sheet_data.reset;
-
-    document.getElementById("avatarImage").src = sheet_data.img;
-
-    const inputs = document.querySelectorAll("input, textarea");
-    inputs.forEach(input => input.addEventListener('change', () => handleControlChange(input)));
-  }
-
   const saveData = () => {
     localStorage.setItem("sheet_data", JSON.stringify(sheet_data));
     console.log("Saved.");
@@ -1278,8 +1223,6 @@
         refreshDisplay();
       });
   }
-
-  loadData();
 
   const crupdateVow = (index, fieldName, value) => {
     if (sheet_data.vows.length < index) {
@@ -1372,6 +1315,7 @@
         sheet_data.log = value
       }
     }
+    saveData();
   };
 
   const setRadioOptions = ({ name, id, value, label }) => {
@@ -1385,6 +1329,7 @@
     } else {
       sheet_data.resources[name] = Number(label);
     }
+    saveData();
   }
 
   const setNumberOptions = ({ name, id, value, label }) => {
@@ -1393,6 +1338,7 @@
     } else {
       sheet_data.stats[name] = Number(value);
     }
+    saveData();
   }
 
   const setRangeOptions = ({ name, id, value, label }) => {
@@ -1402,6 +1348,7 @@
       const vowIndex = name[name.length - 1];
       crupdateVow(vowIndex, 'progress', Number(value));
     }
+    saveData();
   };
 
   const conditionsList = ["wounded", "shaken", "unprepared", "encumbered"];
@@ -1421,9 +1368,7 @@
   };
 
   const handleControlChange = (input) => {
-    //console.log(`${input.name} (${input.id}) has changed, new value: ${input.type === 'radio' ? input.labels[0].textContent : input.value}`);
     const { name, id, type, value } = input;
-    //console.log({ name, id, type, value, label: input.labels[0].textContent });
     if (type === "text" || type === "textarea") {
       setDirectText({ type, id, name, value, label: input.labels[0].textContent });
     }
@@ -1437,7 +1382,6 @@
       setRangeOptions({ name, id, value, label: input.labels[0].textContent })
     }
     if (type === "checkbox") {
-      console.log({ name, id, type, value: input.checked, label: input.labels[0].textContent });
       setCheckboxOptions({ name, id, value: input.checked, label: input.labels[0].textContent })
     }
   }
@@ -1447,6 +1391,63 @@
     document.querySelector("body").className = `palette-${theme}`;
     document.querySelector("#themeButton").textContent = `Theme [${theme}]`;
   }
+
+  const refreshDisplay = () => {
+    document.getElementById("vowColumn").innerHTML = "";
+    document.getElementById("bondColumn").innerHTML = "";
+
+    document.getElementById("expProgress").value = sheet_data.exp;
+    expDisplay.textContent = `Bond progress (${sheet_data.exp})`
+    document.getElementById("name").value = sheet_data.name;
+
+    document.getElementById(`health${sheet_data.resources.health}`).checked = true;
+    document.getElementById(`spirit${sheet_data.resources.spirit}`).checked = true;
+    document.getElementById(`supply${sheet_data.resources.supply}`).checked = true;
+    document.getElementById(`momentum${sheet_data.momentum}`).checked = true;
+
+    document.getElementById('edge').value = sheet_data.stats.edge;
+    document.getElementById('iron').value = sheet_data.stats.iron;
+    document.getElementById('heart').value = sheet_data.stats.heart;
+    document.getElementById('shadow').value = sheet_data.stats.shadow;
+    document.getElementById('wits').value = sheet_data.stats.wits;
+
+    sheet_data.vows.forEach(loadVow);
+    sheet_data.bonds.forEach(loadBond);
+    sheet_data.assets.forEach(loadAsset);
+
+    document.getElementById("wounded").checked = sheet_data.conditions.wounded;
+    document.getElementById("shaken").checked = sheet_data.conditions.shaken;
+    document.getElementById("unprepared").checked = sheet_data.conditions.unprepared;
+    document.getElementById("encumbered").checked = sheet_data.conditions.encumbered;
+
+    document.getElementById("maimed").checked = sheet_data.banes.maimed;
+    document.getElementById("corrupted").checked = sheet_data.banes.corrupted;
+
+    document.getElementById("marked").checked = sheet_data.burdens.marked;
+    document.getElementById("haunted").checked = sheet_data.burdens.haunted;
+
+    document.getElementById("log").value = sheet_data.log;
+    document.getElementById("max").value = sheet_data.max;
+    document.getElementById("reset").value = sheet_data.reset;
+
+    document.getElementById("avatarImage").src = sheet_data.img;
+
+    const inputs = document.querySelectorAll("input, textarea");
+    inputs.forEach(input => input.oninput = () => handleControlChange(input));
+  }
+
+  const loadData = () => {
+    const _sheet_data = localStorage.getItem("sheet_data");
+    if (_sheet_data) {
+      sheet_data = JSON.parse(_sheet_data);
+    }
+
+    refreshDisplay();
+
+    console.log("Loaded.");
+  };
+
+  loadData();
 </script>
 
 </html>
