@@ -362,17 +362,27 @@
       display: flex;
       justify-content: center;
       gap: 1rem;
-      height: 20%;
+      height: fit-content;
+      flex-wrap: wrap;
 
       & button {
         font-size: large;
         text-align: center;
         width: 100%;
       }
+
+      & #momentumBox {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+
+        & label {
+          text-align: center;
+        }
+      }
     }
 
     #vowStatBondContainer {
-      height: 75vh;
       display: flex;
       justify-content: space-evenly;
     }
@@ -494,6 +504,16 @@
     #bondColumn {
       overflow-y: scroll;
 
+      width: 25rem;
+      margin: auto;
+
+      & summary {
+        text-align: center;
+        text-decoration: 1px underline var(--accent);
+        font-size: x-large;
+        cursor: pointer;
+      }
+
       & *+* {
         margin-top: 0.5rem;
       }
@@ -502,22 +522,16 @@
     #statAndConditionContainer {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       gap: 1rem;
       padding: 1rem;
       width: 40%;
-
-      & #statContainer,
-      #conditionContainer {
-        height: 40vh;
-      }
+      height: 90vh;
+      overflow-y: scroll;
 
       & #logContainer {
-        height: 20vh;
-
         & textarea {
           width: 100%;
-          height: 15vh;
+          height: 20vh;
           font-size: small;
         }
       }
@@ -656,19 +670,30 @@
         gap: 1rem;
       }
 
+      #vowColumn,
+      #bondColumn {
+        width: 100%;
+
+        & summary {
+          background-color: var(--text);
+          color: var(--background);
+        }
+      }
+
       #vowStatBondContainer {
-        height:unset;
-        display: block;
+        height: unset;
+        display: flex;
         flex-direction: column;
+        gap: 1rem;
       }
 
       #statAndConditionContainer {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         gap: 1rem;
         padding: 0rem;
         width: 100%;
+        height: unset;
 
         & #statContainer,
         #conditionContainer {
@@ -676,12 +701,10 @@
         }
 
         & #logContainer {
-          height: 20vh;
-
           & textarea {
             width: 100%;
-            height: 15vh;
-            font-size: small;
+            height: 30vh;
+            font-size: medium;
           }
 
           display: block;
@@ -734,7 +757,6 @@
         display: flex;
         justify-content: center;
         gap: 1rem;
-        height: 20%;
 
         & button {
           font-size: large;
@@ -746,11 +768,6 @@
           width: 4rem;
           margin: auto;
         }
-
-        flex-direction: column;
-        text-align: center;
-
-
       }
 
       .statBox {
@@ -777,10 +794,6 @@
         }
 
         margin: auto;
-      }
-
-      #conditionContainer {
-        overflow-y: scroll;
       }
     }
   </style>
@@ -927,42 +940,7 @@
     </details>
   </div>
   <div id="container">
-    <div id="momentumAndTitleContainer">
-      <h2>Momentum</h2>
-      <div id="momentumContainer">
-        <div class="statBox">
-          <button class="flat" onClick="getElementById(`momentum${getElementById('reset').value}`).click()">
-            <label for="reset">Reset</label></button>
-          </button>
-          <input type="number" name="reset" id="reset" value="0" />
-        </div>
-        <input id="momentum-6" name="momentum" type="radio" /><label for="momentum-6">-6</label>
-        <input id="momentum-5" name="momentum" type="radio" /><label for="momentum-5">-5</label>
-        <input id="momentum-4" name="momentum" type="radio" /><label for="momentum-4">-4</label>
-        <input id="momentum-3" name="momentum" type="radio" /><label for="momentum-3">-3</label>
-        <input id="momentum-2" name="momentum" type="radio" /><label for="momentum-2">-2</label>
-        <input id="momentum-1" name="momentum" type="radio" /><label for="momentum-1">-1</label>
-        <input id="momentum0" name="momentum" type="radio" /><label for="momentum±0">0</label>
-        <input id="momentum1" name="momentum" type="radio" /><label for="momentum1">+1</label>
-        <input id="momentum2" name="momentum" type="radio" /><label for="momentum2">+2</label>
-        <input id="momentum3" name="momentum" type="radio" /><label for="momentum3">+3</label>
-        <input id="momentum4" name="momentum" type="radio" /><label for="momentum4">+4</label>
-        <input id="momentum5" name="momentum" type="radio" /><label for="momentum5">+5</label>
-        <input id="momentum6" name="momentum" type="radio" /><label for="momentum6">+6</label>
-        <input id="momentum7" name="momentum" type="radio" /><label for="momentum7">+7</label>
-        <input id="momentum8" name="momentum" type="radio" /><label for="momentum8">+8</label>
-        <input id="momentum9" name="momentum" type="radio" /><label for="momentum9">+9</label>
-        <input id="momentum10" name="momentum" type="radio" /><label for="momentum10">+10</label>
-        <div class="statBox">
-          <button class="flat" onClick="getElementById(`momentum${getElementById('max').value}`).click()">
-            <label for="max">Max</label></button>
-          <input type="number" name="max" id="max" value="0" />
-        </div>
-      </div>
-    </div>
     <div id="vowStatBondContainer">
-      <div id="vowColumn">
-      </div>
       <div id="statAndConditionContainer">
         <div id="statContainer">
           <div id="nameContainer">
@@ -1004,6 +982,65 @@
             </div>
           </div>
         </div>
+        <div id="momentumAndTitleContainer">
+          <h2>Momentum</h2>
+          <div id="momentumContainer">
+            <div class="statBox">
+              <button class="flat" onClick="getElementById(`momentum`).value = getElementById('reset').value">
+                <label for="reset">Reset</label></button>
+              </button>
+              <input type="number" name="reset" id="reset" value="0" />
+            </div>
+            <div id="momentumBox">
+              <input id="momentum" name="momentum" type="range" min="-6" max="10"
+                onchange="momentumDisplay.textContent = `Momentum: ${sheet_data.momentum}`;" /><label
+                id="momentumDisplay" for="momentum">Momentum</label>
+            </div>
+            <div class="statBox">
+              <button class="flat" onClick="getElementById(`momentum`).value = getElementById('max').value">
+                <label for="max">Max</label></button>
+              <input type="number" name="max" id="max" value="0" />
+            </div>
+          </div>
+        </div>
+        <div id="healthSpiritSupplyContainer">
+          <div id="health">
+            <div>
+              <h2>Health</h2>
+            </div>
+            <div class="resource">
+              <input id="health1" name="health" type="radio" /><label for="health1">1</label>
+              <input id="health2" name="health" type="radio" /><label for="health2">2</label>
+              <input id="health3" name="health" type="radio" /><label for="health3">3</label>
+              <input id="health4" name="health" type="radio" /><label for="health4">4</label>
+              <input id="health5" name="health" type="radio" /><label for="health5">5</label>
+            </div>
+          </div>
+          <div id="spirit">
+            <div>
+              <h2>Spirit</h2>
+            </div>
+            <div class="resource">
+              <input id="spirit1" name="spirit" type="radio" /><label for="spirit1">1</label>
+              <input id="spirit2" name="spirit" type="radio" /><label for="spirit2">2</label>
+              <input id="spirit3" name="spirit" type="radio" /><label for="spirit3">3</label>
+              <input id="spirit4" name="spirit" type="radio" /><label for="spirit4">4</label>
+              <input id="spirit5" name="spirit" type="radio" /><label for="spirit5">5</label>
+            </div>
+          </div>
+          <div id="supply">
+            <div>
+              <h2>Supply</h2>
+            </div>
+            <div class="resource">
+              <input id="supply1" name="supply" type="radio" /><label for="supply1">1</label>
+              <input id="supply2" name="supply" type="radio" /><label for="supply2">2</label>
+              <input id="supply3" name="supply" type="radio" /><label for="supply3">3</label>
+              <input id="supply4" name="supply" type="radio" /><label for="supply4">4</label>
+              <input id="supply5" name="supply" type="radio" /><label for="supply5">5</label>
+            </div>
+          </div>
+        </div>
         <div id="conditionContainer">
           <h2>Conditions</h2>
           <div id="conditions">
@@ -1042,46 +1079,12 @@
           </div>
         </div>
       </div>
-      <div id="bondColumn">
-      </div>
-    </div>
-    <div id="healthSpiritSupplyContainer">
-      <div id="health">
-        <div>
-          <h2>Health</h2>
-        </div>
-        <div class="resource">
-          <input id="health1" name="health" type="radio" /><label for="health1">1</label>
-          <input id="health2" name="health" type="radio" /><label for="health2">2</label>
-          <input id="health3" name="health" type="radio" /><label for="health3">3</label>
-          <input id="health4" name="health" type="radio" /><label for="health4">4</label>
-          <input id="health5" name="health" type="radio" /><label for="health5">5</label>
-        </div>
-      </div>
-      <div id="spirit">
-        <div>
-          <h2>Spirit</h2>
-        </div>
-        <div class="resource">
-          <input id="spirit1" name="spirit" type="radio" /><label for="spirit1">1</label>
-          <input id="spirit2" name="spirit" type="radio" /><label for="spirit2">2</label>
-          <input id="spirit3" name="spirit" type="radio" /><label for="spirit3">3</label>
-          <input id="spirit4" name="spirit" type="radio" /><label for="spirit4">4</label>
-          <input id="spirit5" name="spirit" type="radio" /><label for="spirit5">5</label>
-        </div>
-      </div>
-      <div id="supply">
-        <div>
-          <h2>Supply</h2>
-        </div>
-        <div class="resource">
-          <input id="supply1" name="supply" type="radio" /><label for="supply1">1</label>
-          <input id="supply2" name="supply" type="radio" /><label for="supply2">2</label>
-          <input id="supply3" name="supply" type="radio" /><label for="supply3">3</label>
-          <input id="supply4" name="supply" type="radio" /><label for="supply4">4</label>
-          <input id="supply5" name="supply" type="radio" /><label for="supply5">5</label>
-        </div>
-      </div>
+      <details id="vowColumn" open>
+        <summary>Vows</summary>
+      </details>
+      <details id="bondColumn" open>
+        <summary>Bonds & Assets</summary>
+      </details>
     </div>
   </div>
 </body>
@@ -1324,8 +1327,6 @@
       crupdateVow(vowIndex, 'danger', label.toLowerCase());
       const vowProgress = document.getElementById(`progress${vowIndex}`);
       vowProgress.step = stepValues[label.toLowerCase()];
-    } else if (name === 'momentum') {
-      sheet_data.momentum = Number(label);
     } else {
       sheet_data.resources[name] = Number(label);
     }
@@ -1343,7 +1344,9 @@
 
   const setRangeOptions = ({ name, id, value, label }) => {
     if (label.toLowerCase().includes("bond progress")) {
-      sheet_data.exp = value;
+      sheet_data.exp = Number(value);
+    } else if (label.toLowerCase().includes('momentum')) {
+      sheet_data.momentum = Number(value);
     } else {
       const vowIndex = name[name.length - 1];
       crupdateVow(vowIndex, 'progress', Number(value));
@@ -1393,17 +1396,19 @@
   }
 
   const refreshDisplay = () => {
-    document.getElementById("vowColumn").innerHTML = "";
-    document.getElementById("bondColumn").innerHTML = "";
+    document.getElementById("vowColumn").replaceChildren(document.querySelector("#vowColumn summary"));
+    document.getElementById("bondColumn").replaceChildren(document.querySelector("#bondColumn summary"));
 
     document.getElementById("expProgress").value = sheet_data.exp;
-    expDisplay.textContent = `Bond progress (${sheet_data.exp})`
+    expDisplay.textContent = `Bond progress (${sheet_data.exp})`;
+    momentumDisplay.textContent = `Momentum: ${sheet_data.momentum}`;
     document.getElementById("name").value = sheet_data.name;
 
     document.getElementById(`health${sheet_data.resources.health}`).checked = true;
     document.getElementById(`spirit${sheet_data.resources.spirit}`).checked = true;
     document.getElementById(`supply${sheet_data.resources.supply}`).checked = true;
-    document.getElementById(`momentum${sheet_data.momentum}`).checked = true;
+    //document.getElementById(`momentum${sheet_data.momentum}`).checked = true;
+    document.getElementById("momentum").value = sheet_data.momentum;
 
     document.getElementById('edge').value = sheet_data.stats.edge;
     document.getElementById('iron').value = sheet_data.stats.iron;
