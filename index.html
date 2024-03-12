@@ -338,7 +338,8 @@
       border: var(--accent) ridge 2px !important;
     }
 
-    input[type="file"]+label:hover {
+    input[type="file"]+label:hover,
+    input[type="range"]+label:hover {
       border: none !important;
     }
 
@@ -361,25 +362,42 @@
     #momentumContainer {
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 0.5rem;
       height: fit-content;
       flex-wrap: wrap;
 
-      & button {
-        font-size: large;
-        text-align: center;
-        width: 100%;
+      & .statBox {
+        & button {
+          font-size: large;
+          text-align: center;
+          width: 100%;
+        }
+      }
+
+      >button {
+        padding: 1rem 1rem;
       }
 
       & #momentumBox {
-        width: 50%;
         display: flex;
         flex-direction: column;
+        justify-content: center;
 
         & label {
           text-align: center;
         }
       }
+    }
+
+
+    #momentum {
+      background: none;
+      border: none;
+      text-align: center;
+      font-size: xx-large;
+      appearance: textfield;
+      width: 10rem;
+      text-decoration: var(--accent) dashed underline;
     }
 
     #vowStatBondContainer {
@@ -442,7 +460,6 @@
       margin: auto;
       padding-top: 1rem;
       padding-bottom: 1rem;
-      width: 20rem;
       position: relative;
 
       & * {
@@ -661,7 +678,28 @@
       pointer-events: none;
     }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 1299px) {
+      #healthSpiritSupplyContainer {
+        & input[type="radio"]+label {
+          width: 80%;
+        }
+      }
+
+      #conditions {
+        flex-wrap: wrap;
+      }
+
+      #health,
+      #spirit,
+      #supply {
+        & .resource {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+
+    @media screen and (max-width: 999px) {
       #container {
         display: flex;
         flex-direction: column;
@@ -756,12 +794,14 @@
       #momentumContainer {
         display: flex;
         justify-content: center;
-        gap: 1rem;
+        flex-direction: row;
 
-        & button {
-          font-size: large;
-          text-align: center;
-          width: 100%;
+        & .statBox {
+          & button {
+            font-size: large;
+            text-align: center;
+            width: 100%;
+          }
         }
 
         & label {
@@ -899,7 +939,7 @@
       }
       return random
     }
-
+    
     const random = SeedRandom()
 
     //const _randBetween = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
@@ -933,7 +973,8 @@
       <button class="flat" onclick="addBond()">Add bond</button>
       <button class="flat" onclick="addAsset()">Add asset</button>
       <hr />
-      <button class="flat" onclick="saveData()" title="You shouldn't need to be doing this, but mash away <3">Save</button>
+      <button class="flat" onclick="saveData()"
+        title="You shouldn't need to be doing this, but mash away <3">Save</button>
       <button class="flat" onclick="exportData()">Export</button>
       <button class="flat" onclick="importData()">Import</button>
       <hr />
@@ -956,7 +997,7 @@
           <div id="progressContainer">
             <label for="expProgress" id="expDisplay">Bond progress</label>
             <input type="range" name="progress" id="expProgress" min="0" max="20"
-              oninput="expDisplay.textContent = `Bond progress (${this.value})`" />
+              onchange="expDisplay.textContent = `Bond progress (${this.value})`" />
             <script>expDisplay.textContent = `Bond progress (${expProgress.value})`;</script>
           </div>
           <div id="stats">
@@ -984,21 +1025,30 @@
           </div>
         </div>
         <div id="momentumAndTitleContainer">
-          <h2>Momentum</h2>
+          <h2><label id="momentumDisplay" for="momentum">Momentum</label></h2>
           <div id="momentumContainer">
             <div class="statBox">
-              <button class="flat" onClick="getElementById(`momentum`).value = getElementById('reset').value">
+              <button class="flat"
+                onClick="resetMomentum()">
                 <label for="reset">Reset</label></button>
               </button>
               <input type="number" name="reset" id="reset" value="0" />
             </div>
+            <button class="flat"
+              onClick="subMomentum()">
+              <label>-</label></button>
+            </button>
             <div id="momentumBox">
-              <input id="momentum" name="momentum" type="range" min="-6" max="10"
-                onchange="momentumDisplay.textContent = `Momentum: ${sheet_data.momentum}`;" /><label
-                id="momentumDisplay" for="momentum">Momentum</label>
+              <input id="momentum" name="momentum" type="number" min="-6" max="10"
+                onchange="momentumDisplay.textContent = `Momentum: (${sheet_data.momentum})`;" />
             </div>
+            <button class="flat"
+              onClick="addMomentum()">
+              <label>+</label></button>
+            </button>
             <div class="statBox">
-              <button class="flat" onClick="getElementById(`momentum`).value = getElementById('max').value">
+              <button class="flat"
+                onClick="maxMomentum()">
                 <label for="max">Max</label></button>
               <input type="number" name="max" id="max" value="0" />
             </div>
@@ -1301,6 +1351,31 @@
     sheet_data.assets[index].text = value;
   };
 
+  const addMomentum = () => {
+    sheet_data.momentum = Math.min(sheet_data.momentum + 1, 10);
+    saveData();
+    refreshDisplay();
+  }
+
+  const subMomentum = () => {
+    sheet_data.momentum = Math.max(sheet_data.momentum - 1, -6);
+    saveData();
+    refreshDisplay();
+  }
+
+  const resetMomentum = () => {
+    sheet_data.momentum = sheet_data.reset;
+    saveData();
+    refreshDisplay();
+  }
+
+  const maxMomentum = () => {
+    sheet_data.momentum = sheet_data.max;
+    saveData();
+    refreshDisplay();
+  }
+
+
   const setDirectText = ({ type, id, name, value, label }) => {
     if (id === "name") {
       sheet_data["name"] = value;
@@ -1337,6 +1412,8 @@
   const setNumberOptions = ({ name, id, value, label }) => {
     if (["max", "reset"].includes(name)) {
       sheet_data[name] = Number(value);
+    } else if (label.toLowerCase().includes('momentum')) {
+      sheet_data.momentum = Number(value);
     } else {
       sheet_data.stats[name] = Number(value);
     }
@@ -1346,8 +1423,6 @@
   const setRangeOptions = ({ name, id, value, label }) => {
     if (label.toLowerCase().includes("bond progress")) {
       sheet_data.exp = Number(value);
-    } else if (label.toLowerCase().includes('momentum')) {
-      sheet_data.momentum = Number(value);
     } else {
       const vowIndex = name[name.length - 1];
       crupdateVow(vowIndex, 'progress', Number(value));
@@ -1402,13 +1477,12 @@
 
     document.getElementById("expProgress").value = sheet_data.exp;
     expDisplay.textContent = `Bond progress (${sheet_data.exp})`;
-    momentumDisplay.textContent = `Momentum: ${sheet_data.momentum}`;
+    momentumDisplay.textContent = `Momentum: (${sheet_data.momentum})`;
     document.getElementById("name").value = sheet_data.name;
 
     document.getElementById(`health${sheet_data.resources.health}`).checked = true;
     document.getElementById(`spirit${sheet_data.resources.spirit}`).checked = true;
     document.getElementById(`supply${sheet_data.resources.supply}`).checked = true;
-    //document.getElementById(`momentum${sheet_data.momentum}`).checked = true;
     document.getElementById("momentum").value = sheet_data.momentum;
 
     document.getElementById('edge').value = sheet_data.stats.edge;
